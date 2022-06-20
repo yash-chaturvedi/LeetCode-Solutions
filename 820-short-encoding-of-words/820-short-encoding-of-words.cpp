@@ -1,79 +1,34 @@
-class TrieNode {
-    vector<TrieNode*> nodes;
-    int childCnt;
-    
-    public :
-    
-    TrieNode() {
-        nodes = vector<TrieNode*>(26, NULL);
-        childCnt = 0;
-    }
-    
-    bool hasNode(char c) {
-        return nodes[c - 'a'] != NULL;
-    }
-    
-    TrieNode * getNode(char c) {
-        return nodes[c - 'a'];
-    }
-    
-    void setNode(char c, TrieNode *node) {
-        nodes[c - 'a'] = node;
-    }
-    
-    void incChildCnt() {
-        childCnt++;
-    }
-    
-    int getChildCnt() {
-        return childCnt;
-    }
-};
-
-class Trie{
-    TrieNode *root;
-    int totalInsertions;
-    public :
-    
-    Trie() {
-        root = new TrieNode();
-        totalInsertions = 0;
-    }
-    
-    void insert(string s) {
-        TrieNode *cur = root;
-        for(int i=0; i<s.size(); i++) {
-            
-            char c = s[i];      
-            if(!cur->hasNode(c)) {
-                int insertions = cur->getChildCnt() == 0 ? 1 : i+1;
-                if(cur -> getChildCnt() > 0 && cur != root) insertions++;
-                totalInsertions += insertions;
-                cur->setNode(c, new TrieNode());
-                cur->incChildCnt();
-            }
-            cur = cur->getNode(c);
-        }
-    }
-    
-    int getMinEncodingLength() {
-        return totalInsertions + root->getChildCnt();
-    }
-};
-
 class Solution {
 public:
+    // Compare function for the condition of the sorting i.e. according to decreasing length 
+    static bool compare (string& first, string& second) {
+        return first.size() > second.size();
+    }
     int minimumLengthEncoding(vector<string>& words) {
-        Trie *trie = new Trie();
-        for(string s : words) {
-            reverse(s.begin(), s.end());
-            trie->insert(s);
+        unordered_map<string, int> mp;
+        int ans = 0;
+        
+        //sorting the array in decreasing length sequence
+        sort(words.begin(), words.end(), compare);
+
+        //Entering each word in hash map.
+        for(int i=0; i<words.size(); i++){
+            mp[words[i]]++;
         }
-        return trie->getMinEncodingLength();
+        
+        //For each word if it exist in hash map then add its length+1 to ans as # is also included.
+        for(int i=0; i<words.size(); i++){
+            int k = words[i].size();
+            if(mp[words[i]] >0){
+                ans += (k+1);
+            }
+            
+            //Deleting record of any suffix of the word from hash map as it is already covered.
+            for(int j=k-1; j>=0; j--){
+                string s = words[i].substr(j);
+                mp[s] = 0;
+            }
+        }
+        return ans;
     }
 };
-
-
-
-
-
