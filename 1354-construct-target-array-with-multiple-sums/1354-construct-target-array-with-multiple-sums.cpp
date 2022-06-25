@@ -3,18 +3,23 @@ public:
     bool isPossible(vector<int>& target) {
         priority_queue<int> pq;
         long long sum = 0;
-        for(auto num : target){
-            pq.push(num);
-            sum+=num;
+        
+        if(target.size() == 1) return target[0] == 1;
+        
+        for(int e : target) {
+            pq.push(e);
+            sum += e;
         }
-        while(pq.top() != 1){
-            sum -= pq.top();
-            if(sum == 0 || sum >= pq.top()) return false;
-            int old = pq.top()%sum;
-            if(sum != 1 && old == 0) return false;
+        
+        while(pq.top() != 1) {
+            int maxE = pq.top();
             pq.pop();
-            pq.push(old);
-            sum += (old);
+            sum -= maxE;
+            if(sum > maxE) return false;
+            int newE = maxE % sum;
+            if(sum != 1 && newE == 0) return false;
+            pq.push(newE);
+            sum += newE;
         }
         return true;
     }
