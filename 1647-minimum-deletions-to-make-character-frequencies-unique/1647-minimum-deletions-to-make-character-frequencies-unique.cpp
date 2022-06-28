@@ -11,11 +11,12 @@ public:
         sort(charFreq.begin(), charFreq.end());
         
         for(int i=24; i>=0; i--) {
+            if(charFreq[i] == 0) break;
             int prevFreq = charFreq[i];
             if(charFreq[i] >= charFreq[i+1]) {
                 charFreq[i] = max(0, charFreq[i+1] - 1);
+                ans += prevFreq - charFreq[i];
             }
-            ans += prevFreq - charFreq[i];
         }
         return ans;
     }
