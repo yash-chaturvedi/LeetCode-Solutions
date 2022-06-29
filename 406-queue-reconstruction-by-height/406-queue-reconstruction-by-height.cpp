@@ -1,3 +1,18 @@
+class Solution {
+public:
+    static bool compare(vector<int> &v1, vector<int> &v2) {
+        if(v1[0] != v2[0]) return v1[0] > v2[0];
+        return v1[1] < v2[1];
+    }
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        sort(people.begin(), people.end(), compare);
+        vector<vector<int>> res;
+        for(auto p : people) {
+            res.insert(res.begin() + p[1], p);
+        }
+        return res;
+    }
+};
 
 // class Solution {
 // public:
@@ -22,24 +37,24 @@
 //     }
 // };
 
-class Solution {
-public:
-    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
-        int n = people.size();
-        sort(people.begin(), people.end());
-        vector<bool> placeFilled(n, false);
+// class Solution {
+// public:
+//     vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+//         int n = people.size();
+//         sort(people.begin(), people.end());
+//         vector<bool> placeFilled(n, false);
         
-        vector<vector<int>> ans(n);
-        for(auto p : people) {
-            int cnt=0, i=0;
-            for(; i<n; i++) {
-                if(placeFilled[i] && ans[i][0] < p[0]) continue;
-                if(cnt == p[1]) break;
-                cnt++;
-            }
-            ans[i] = p;
-            placeFilled[i] = true;
-        }
-        return ans;
-    }
-};
+//         vector<vector<int>> ans(n);
+//         for(auto p : people) {
+//             int cnt=0, i=0;
+//             for(; i<n; i++) {
+//                 if(placeFilled[i] && ans[i][0] < p[0]) continue;
+//                 if(cnt == p[1]) break;
+//                 cnt++;
+//             }
+//             ans[i] = p;
+//             placeFilled[i] = true;
+//         }
+//         return ans;
+//     }
+// };
