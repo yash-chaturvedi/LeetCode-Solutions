@@ -1,18 +1,57 @@
 class Solution {
+    vector<int> BIT;
+    int n;
 public:
-    static bool compare(vector<int> &v1, vector<int> &v2) {
-        if(v1[0] != v2[0]) return v1[0] > v2[0];
-        return v1[1] < v2[1];
-    }
     vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        n = people.size();
+        BIT = vector<int> (n+1, 0);
         sort(people.begin(), people.end(), compare);
-        vector<vector<int>> res;
-        for(auto p : people) {
-            res.insert(res.begin() + p[1], p);
+        
+        for(int i=1; i<=n; i++) {
+            update(i, 1);
         }
-        return res;
+        
+        vector<vector<int>> ans(n);
+        for(auto p : people) {
+            int i = getIdx(p[1]+1);
+            ans[i-1] = p;
+            update(i, -1);
+        }
+        return ans;
+    }
+    
+    static bool compare(vector<int> &v1, vector<int> &v2) {
+        if(v1[0] != v2[0]) return v1[0] < v2[0];
+        return v1[1] > v2[1];
+    }
+    
+    void update(int i, int x) {
+        for(; i <= n; i += (i & -i)) {
+            BIT[i] += x;
+        }
+    }
+    
+    int getIdx(int val) {
+        int lo=1, hi=n;
+        while(lo <= hi) {
+            int mid = lo + (hi - lo)/2;
+            int midVal = sum(mid);
+            if(midVal >= val) hi = mid - 1;
+            else lo = mid + 1;
+        }
+        return lo;
+    }
+    
+    int sum(int i) {
+        int s = 0;
+        for(; i>0; i -= (i & -i)) {
+            s += BIT[i];
+        }
+        return s;
     }
 };
+
+
 
 // class Solution {
 // public:
@@ -56,5 +95,21 @@ public:
 //             placeFilled[i] = true;
 //         }
 //         return ans;
+//     }
+// };
+
+// class Solution {
+// public:
+//     static bool compare(vector<int> &v1, vector<int> &v2) {
+//         if(v1[0] != v2[0]) return v1[0] > v2[0];
+//         return v1[1] < v2[1];
+//     }
+//     vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+//         sort(people.begin(), people.end(), compare);
+//         vector<vector<int>> res;
+//         for(auto p : people) {
+//             res.insert(res.begin() + p[1], p);
+//         }
+//         return res;
 //     }
 // };
