@@ -3,19 +3,37 @@ public:
     int wiggleMaxLength(vector<int>& nums) {
         int n = nums.size();
         if(n < 2) return n;
-        int up = 1, down = 1;
-        
-        for(int i=1; i<n; i++) {
-            if(nums[i] > nums[i-1]) {
-                up = 1 + down;
-            }
-            else if(nums[i] < nums[i-1]) {
-                down = 1 + up;
+        int prevDiff = nums[1] - nums[0];
+        int len = prevDiff == 0 ? 1 : 2;
+        for(int i=2; i<n; i++) {
+            int curDiff = nums[i] - nums[i-1];
+            if((curDiff > 0 && prevDiff <= 0) || (curDiff < 0 && prevDiff >=0)) {
+                len++;
+                prevDiff = curDiff;
             }
         }
-        return max(up, down);
+        return len;
     }
 };
+
+// class Solution {
+// public:
+//     int wiggleMaxLength(vector<int>& nums) {
+//         int n = nums.size();
+//         if(n < 2) return n;
+//         int up = 1, down = 1;
+        
+//         for(int i=1; i<n; i++) {
+//             if(nums[i] > nums[i-1]) {
+//                 up = 1 + down;
+//             }
+//             else if(nums[i] < nums[i-1]) {
+//                 down = 1 + up;
+//             }
+//         }
+//         return max(up, down);
+//     }
+// };
 
 // class Solution {
 // public:
