@@ -7,8 +7,7 @@ public:
         // 0 -> cur element is greater than prev
         // 1 -> cur element is smaller than prev
         vector<vector<int>> dp(n+1, vector<int> (2, 0));
-        dp[0][0] = dp[0][1] = 1;
-        for(int i=1; i<n; i++) {
+        for(int i=0; i<n; i++) {
             dp[i][0] = dp[i][1] = 1;
             for(int j=0; j<i; j++) {
                 if(nums[i] > nums[j]) {
