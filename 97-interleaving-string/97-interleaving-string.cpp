@@ -1,22 +1,18 @@
 class Solution {
 public:
-    
     bool helper(string &s1, string &s2, string &s3, 
-                int n, int m, int l, int i, int j, int k, 
-                vector<vector<vector<int>>> &dp) {
+                int n, int m, int i, int j, vector<vector<int>> &dp) {
         
-        if(k == l) return true;
-        if(dp[i][j][k] != -1) return dp[i][j][k];
+        if(i+j == n+m) return true;
+        if(dp[i][j] != -1) return dp[i][j];
         
         bool res1 = false, res2 = false;
         
-        if(i<n && s1[i] == s3[k]) res1 = helper(s1, s2, s3, 
-                                                n, m, l, i+1, j, k+1, dp);
+        if(i<n && s1[i] == s3[i+j]) res1 = helper(s1, s2, s3, n, m, i+1, j, dp);
         
-        if(j<m && s2[j] == s3[k]) res2 = helper(s1, s2, s3, 
-                                                n, m, l, i, j+1, k+1, dp);
+        if(j<m && s2[j] == s3[i+j]) res2 = helper(s1, s2, s3, n, m, i, j+1, dp);
         
-        return dp[i][j][k] = res1 || res2;
+        return dp[i][j] = res1 || res2;
     }
     
     bool isInterleave(string s1, string s2, string s3) {
@@ -30,8 +26,7 @@ public:
         if(s2.empty()) {
             return s1 == s3;
         }
-        vector<vector<vector<int>>> dp
-            (n+1, vector<vector<int>> (m+1, vector<int> (l+1, -1)));
-        return helper(s1, s2, s3, n, m, l, 0, 0, 0, dp);
+        vector<vector<int>> dp (n+1, vector<int> (m+1, -1));
+        return helper(s1, s2, s3, n, m, 0, 0, dp);
     }
 };
