@@ -11,22 +11,52 @@ public:
         if(s2.empty()) {
             return s1 == s3;
         }
-        vector<vector<bool>> dp (n+1, vector<bool> (m+1, false));
+        vector<bool> dp (m+1, false);
         
         for(int i=n; i>=0; i--) {
             for(int j=m; j>=0; j--) {
-                if(i+j == n+m) dp[i][j] = true;
+                if(i+j == n+m) dp[j] = true;
                 else {
                     bool res1 = false, res2 = false;
-                    if(i<n && s1[i] == s3[i+j]) res1 = dp[i+1][j];
-                    if(j<m && s2[j] == s3[i+j]) res2 = dp[i][j+1];
-                    dp[i][j] = res1 || res2;
+                    if(i<n && s1[i] == s3[i+j]) res1 = dp[j];
+                    if(j<m && s2[j] == s3[i+j]) res2 = dp[j+1];
+                    dp[j] = res1 || res2;
                 }
             }
         }
-        return dp[0][0];
+        return dp[0];
     }
 };
+
+// class Solution {
+// public:
+//     bool isInterleave(string s1, string s2, string s3) {
+//         int n = s1.size(), m = s2.size(), l = s3.size();
+        
+//         if(n+m != l) return false;
+
+//         if(s1.empty()) {
+//             return s2 == s3;
+//         }
+//         if(s2.empty()) {
+//             return s1 == s3;
+//         }
+//         vector<vector<bool>> dp (n+1, vector<bool> (m+1, false));
+        
+//         for(int i=n; i>=0; i--) {
+//             for(int j=m; j>=0; j--) {
+//                 if(i+j == n+m) dp[i][j] = true;
+//                 else {
+//                     bool res1 = false, res2 = false;
+//                     if(i<n && s1[i] == s3[i+j]) res1 = dp[i+1][j];
+//                     if(j<m && s2[j] == s3[i+j]) res2 = dp[i][j+1];
+//                     dp[i][j] = res1 || res2;
+//                 }
+//             }
+//         }
+//         return dp[0][0];
+//     }
+// };
 
 // class Solution {
 // public:
