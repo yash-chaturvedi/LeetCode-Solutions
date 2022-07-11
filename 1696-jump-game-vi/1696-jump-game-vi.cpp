@@ -2,19 +2,39 @@ class Solution {
 public:
     int maxResult(vector<int>& nums, int k) {
         int n = nums.size();
-        priority_queue<pair<int, int>> pq;
         vector<int> score(n);
+        deque<int> q;
+        
         score[0] = nums[0];
-        pq.push({nums[0], 0});
+        q.push_back(0);
         
         for(int i=1; i<n; i++) {
-            while(!pq.empty() && pq.top().second < i-k) pq.pop();
-            score[i] = pq.top().first + nums[i];
-            pq.push({score[i], i});
+            while(q.front() < i-k) q.pop_front();
+            score[i] = nums[i] + score[q.front()];
+            while(!q.empty() && score[q.back()] <= score[i]) q.pop_back();
+            q.push_back(i);
         }
         return score[n-1];
     }
 };
+
+// class Solution {
+// public:
+//     int maxResult(vector<int>& nums, int k) {
+//         int n = nums.size();
+//         priority_queue<pair<int, int>> pq;
+//         vector<int> score(n);
+//         score[0] = nums[0];
+//         pq.push({nums[0], 0});
+        
+//         for(int i=1; i<n; i++) {
+//             while(!pq.empty() && pq.top().second < i-k) pq.pop();
+//             score[i] = pq.top().first + nums[i];
+//             pq.push({score[i], i});
+//         }
+//         return score[n-1];
+//     }
+// };
 
 // class Solution {
 // public:
