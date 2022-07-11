@@ -1,25 +1,36 @@
 class Solution {
 public:
     int maxResult(vector<int>& nums, int k) {
-        int n = nums.size() ;
-        vector<int> dp(n+1);
-        priority_queue<pair<int,int>> q;
+        int n = nums.size();
+        priority_queue<pair<int, int>> pq;
+        vector<int> score(n);
+        score[0] = nums[0];
+        pq.push({nums[0], 0});
         
-        dp[1] = nums[0];
-        q.push({dp[1],1});
-        
-        for(int i=2;i<=n;i++){
-            int pos = q.top().second;
-            while(pos+k<i){
-                q.pop();
-                pos = q.top().second;
-            }
-            int mx = q.top().first;
-        
-            dp[i] = nums[i-1] + mx;
-            q.push({dp[i],i});
+        for(int i=1; i<n; i++) {
+            while(!pq.empty() && pq.top().second < i-k) pq.pop();
+            score[i] = pq.top().first + nums[i];
+            pq.push({score[i], i});
         }
-        return dp[n];
-        
+        return score[n-1];
     }
 };
+
+// class Solution {
+// public:
+//     int helper(vector<int>& nums, int k, int i, vector<int> &dp) {
+//         if(i == 0) return nums[i];
+//         if(dp[i] != -1) return dp[i];
+        
+//         int cost = INT_MIN;
+//         for(int j=i-1; j>=max(0, i-k); j--) {
+//             cost = max(cost, helper(nums, k, j, dp));
+//         }
+//         return dp[i] = cost + nums[i];
+//     }
+//     int maxResult(vector<int>& nums, int k) {
+//         int n = nums.size();
+//         vector<int> dp(n, -1);
+//         return helper(nums, k, n-1, dp);
+//     }
+// };
