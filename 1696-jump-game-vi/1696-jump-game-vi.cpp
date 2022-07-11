@@ -7,7 +7,7 @@ public:
         
         score[0] = nums[0];
         q.push_back(0);
-        
+        // front of queue will always contain the vaild index with max score
         for(int i=1; i<n; i++) {
             while(q.front() < i-k) q.pop_front();
             score[i] = nums[i] + score[q.front()];
