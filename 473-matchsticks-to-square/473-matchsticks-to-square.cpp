@@ -1,19 +1,19 @@
 class Solution {
 public:
     
-    bool helper(vector<int> &matchsticks, int n, vector<bool> &used, 
+    bool helper(vector<int> &matchsticks, int n, int mask, 
                 int oneSideLen, int sidesDone, int curLen, int i) {
         
         if(sidesDone == 4) return true;
-        if(curLen == oneSideLen) return helper(matchsticks, n, used, oneSideLen, sidesDone+1, 0, 0);
+        if(curLen == oneSideLen) return helper(matchsticks, n, mask, oneSideLen, sidesDone+1, 0, 0);
         if(i==n) return false;
         
         for(; i<n; i++) {
-            if(!used[i] && (curLen + matchsticks[i] <= oneSideLen)) {
-                used[i] = true;
-                if(helper(matchsticks, n, used, oneSideLen, sidesDone, 
+            if(!(mask>>i & 1) && (curLen + matchsticks[i] <= oneSideLen)) {
+                mask = mask | 1<<i;
+                if(helper(matchsticks, n, mask, oneSideLen, sidesDone, 
                           curLen + matchsticks[i], i+1)) return true;
-                used[i] = false;
+                mask = mask ^ 1<<i;
             }
         }
         return false;
@@ -26,10 +26,42 @@ public:
         if(k % 4 != 0) return false;
         k /= 4;
         sort(matchsticks.begin(), matchsticks.end(), greater<>());
-        vector<bool> used(n, false);
-        return helper(matchsticks, n, used, k, 0, 0, 0);
+        return helper(matchsticks, n, 0, k, 0, 0, 0);
     }
 };
+
+// class Solution {
+// public:
+    
+//     bool helper(vector<int> &matchsticks, int n, vector<bool> &used, 
+//                 int oneSideLen, int sidesDone, int curLen, int i) {
+        
+//         if(sidesDone == 4) return true;
+//         if(curLen == oneSideLen) return helper(matchsticks, n, used, oneSideLen, sidesDone+1, 0, 0);
+//         if(i==n) return false;
+        
+//         for(; i<n; i++) {
+//             if(!used[i] && (curLen + matchsticks[i] <= oneSideLen)) {
+//                 used[i] = true;
+//                 if(helper(matchsticks, n, used, oneSideLen, sidesDone, 
+//                           curLen + matchsticks[i], i+1)) return true;
+//                 used[i] = false;
+//             }
+//         }
+//         return false;
+//     }
+    
+//     bool makesquare(vector<int>& matchsticks) {
+//         int n = matchsticks.size();
+//         int k = 0;
+//         for(int l : matchsticks) k+=l;
+//         if(k % 4 != 0) return false;
+//         k /= 4;
+//         sort(matchsticks.begin(), matchsticks.end(), greater<>());
+//         vector<bool> used(n, false);
+//         return helper(matchsticks, n, used, k, 0, 0, 0);
+//     }
+// };
 
 // class Solution {
 // public:
