@@ -13,15 +13,14 @@ class Solution {
 public:
     
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder, unordered_map<int, int> &mp, 
-                        int inStart, int inEnd, int preStart) {
+                        int inStart, int inEnd, int &preStart) {
         
         if(inStart > inEnd) return NULL;
         
-        int rootIdx = mp[preorder[preStart]];
-        int leftSize = rootIdx - inStart;
+        int rootIdx = mp[preorder[preStart++]];
         TreeNode *root = new TreeNode(inorder[rootIdx]);
-        root->left = buildTree(preorder, inorder, mp, inStart, rootIdx-1, preStart+1);
-        root->right = buildTree(preorder, inorder, mp, rootIdx+1, inEnd, preStart+leftSize+1);
+        root->left = buildTree(preorder, inorder, mp, inStart, rootIdx-1, preStart);
+        root->right = buildTree(preorder, inorder, mp, rootIdx+1, inEnd, preStart);
         return root;
     }
     
@@ -31,6 +30,7 @@ public:
         for(int i=0; i<n; i++) {
             mp[inorder[i]] = i;
         }
-        return buildTree(preorder, inorder, mp, 0, n-1, 0);
+        int preStart = 0;
+        return buildTree(preorder, inorder, mp, 0, n-1, preStart);
     }
 };
