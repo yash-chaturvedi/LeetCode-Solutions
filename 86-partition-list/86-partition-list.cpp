@@ -14,18 +14,17 @@ public:
         ListNode *first = new ListNode(), *second = new ListNode();
         ListNode *firstStart = first, *secondStart = second;
         while(head) {
-            ListNode *temp = head;
-            head = head->next;
-            temp->next = NULL;
-            if(temp->val < x) {
-                first->next = temp;
+            if(head->val < x) {
+                first->next = head;
                 first = first->next;
             }
             else {
-                second->next = temp;
+                second->next = head;
                 second = second->next;
             }
+            head = head->next;
         }
+        second->next = NULL;
         first->next = secondStart->next;
         return firstStart->next;
     }
