@@ -11,7 +11,7 @@ public:
     }
     
     void insert(int x) {
-        for(int i=x; i<20001; i+=(i & -i)) {
+        for(int i=x; i<size(BIT); i+=(i & -i)) {
             BIT[i] += 1;
         }
     }
