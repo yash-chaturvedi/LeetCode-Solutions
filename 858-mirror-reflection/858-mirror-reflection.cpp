@@ -10,11 +10,11 @@ public:
         p /= g;
         q /= g;
         
-        int numReflections = p, numRooms = q;
+        int minReflections = p, minRooms = q;
         
-        if(numReflections % 2 == 0) return 2;
+        if(minReflections % 2 == 0) return 2;
         
-        if(numRooms % 2 == 0) return 0;
+        if(minRooms % 2 == 0) return 0;
         
         return 1;
     }
